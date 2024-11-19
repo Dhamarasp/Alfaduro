@@ -37,7 +37,11 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 // Route::post('/barang/create/store', [ItemController::class, 'store'])->name('barang.store');
 // Route::delete('/barang/{item}', [ItemController::class, 'destroy'])->name('barang.destroy');
 
-Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+Route::get('/transaksi', function()
+{
+    return view('transaksi.index');
+    
+})->name('transaksi.index');
 
 Route::post('/keranjang/store', [CartController::class, 'store'])->name('keranjang.store');
 Route::delete('/keranjang/{cart}', [CartController::class, 'destroy'])->name('keranjang.destroy');
