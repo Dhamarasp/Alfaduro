@@ -34,20 +34,6 @@
     @include('layouts.footer')
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script>
-        const inputField = document.getElementById("quantityInput");
-      
-        document.getElementById("increaseBtn").addEventListener("click", function () {
-          inputField.value = parseInt(inputField.value) + 1;
-        });
-      
-        document.getElementById("decreaseBtn").addEventListener("click", function () {
-          if (parseInt(inputField.value) > 1) {
-            inputField.value = parseInt(inputField.value) - 1;
-          }
-        });
-      </script>
-      
 </body>
 
 </html>

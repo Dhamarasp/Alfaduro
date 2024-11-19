@@ -29,8 +29,8 @@
                             <option value="{{ $brand->id }}" {{ $item->brand_id == $brand->id ? 'selected' : '' }}>
                                 {{ $brand->nameBrand }}
                             </option>
+                            <option value="" {{ $item->brand_id == null ? 'selected' : '' }}>No Brand</option>
                         @endforeach
-                        <option value="">No Brand</option>
                     </select>
                 </div>
                 <div class="mb-3">
