@@ -16,6 +16,9 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 
+            $table->bigInteger('paymentMethod_id')->unsigned();
+            $table->foreign('paymentMethod_id')->references('id')->on('payment_methods')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->date('date');
             $table->integer('total')->unsigned();
             $table->integer('pay_total')->unsigned();
