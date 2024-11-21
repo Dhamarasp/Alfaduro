@@ -17,9 +17,10 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-
+    
     <!-- Navbar -->
     @include('layouts.navbar')
+    <!-- End Navbar -->
 
     <!-- Main Content -->
     <main class="p-5 flex-grow-1">
@@ -29,9 +30,11 @@
             </div>
         </div>
     </main>
+    <!-- End Content -->
 
     <!-- Footer -->
     @include('layouts.footer')
+    <!-- End Footer -->
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>

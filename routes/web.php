@@ -2,11 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\RiwayatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -37,15 +36,13 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 // Route::post('/barang/create/store', [ItemController::class, 'store'])->name('barang.store');
 // Route::delete('/barang/{item}', [ItemController::class, 'destroy'])->name('barang.destroy');
 
+Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+
 Route::get('/transaksi', function()
 {
     return view('transaksi.index');
     
 })->name('transaksi.index');
-
-Route::post('/keranjang/store', [CartController::class, 'store'])->name('keranjang.store');
-Route::delete('/keranjang/{cart}', [CartController::class, 'destroy'])->name('keranjang.destroy');
-Route::patch('/keranjang/update', [CartController::class, 'update'])->name('keranjang.update');
 
 
 

@@ -4,7 +4,7 @@
     
 <div class="card shadow-lg">
     <div class="card-header text-center">
-        <h3>Tambah Barang</h3>
+        <h3>Tambah Brand</h3>
     </div>
     <div class="card-body">
         <form action="{{ route('brand.store') }}" method="POST" enctype="multipart/form-data">

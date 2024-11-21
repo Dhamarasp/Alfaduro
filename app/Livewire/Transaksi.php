@@ -12,9 +12,7 @@ class Transaksi extends Component
 {
     use WithPagination;
     protected $paginationTheme = "bootstrap";
-    public $query;
-    public $quantity = [];
-
+    public $query, $quantity = [];
 
     public function mount()
     {
@@ -60,11 +58,9 @@ class Transaksi extends Component
 
             $this->quantity[$id->id] = $id->qty;
         } else {
-
+            return redirect()->route('transaksi.index')->with('error','Stock Maksimal');
         }
     }
-
-    
 
     public function decreaseQty(ModelsCart $id)
     {
@@ -81,7 +77,7 @@ class Transaksi extends Component
 
             $this->quantity[$id->id] = $id->qty;
         } else {
-
+            return redirect()->route('transaksi.index')->with('error','Quantity Minimal 1');
         }
     }
 
@@ -100,7 +96,7 @@ class Transaksi extends Component
 
     public function render()
     {
-        $paginate = 6;
+        $paginate = 9;
 
         if ($this->query != null) {
             # code...
@@ -111,7 +107,7 @@ class Transaksi extends Component
             $dataItems = ModelsItem::doesntHave('cart')->with('category', 'brand')->paginate($paginate);
         }
 
-        $dataCarts = ModelsCart::with('item')->paginate($paginate);
+        $dataCarts = ModelsCart::with('item')->get();
 
         $total = $dataCarts->sum(function($item){
             return $item->qty * $item->item->price;

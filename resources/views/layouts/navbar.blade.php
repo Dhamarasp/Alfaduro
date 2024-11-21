@@ -22,7 +22,10 @@
                     <a class="nav-link text-light" href="{{ route('brand.index') }}">Brand</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Riwayat</a>
+                    <a class="nav-link text-light" href="{{ route('riwayat.index') }}">Riwayat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="#">Pembayaran</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">

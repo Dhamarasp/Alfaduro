@@ -131,9 +131,13 @@
                                     <td colspan="2"><input class="form-control" type="text" disabled value="{{ 'Rp ' . number_format($total, 0, ',', '.') }}"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-end">Pembayaran</td>
+                                    <td colspan="3" class="text-end">Opsi Pembayaran</td>
                                     <td colspan="2">
-                                        <input type="number" class="form-control">
+                                        <select name="" id="" class="form-control">
+                                            <option value="" selected disabled>Pilih Opsi Pembayaran</option>
+                                            <option value="">Cash</option>
+                                            <option value="">Qris</option>
+                                        </select>
                                     </td>
                                 </tr>
                             </tfoot>
