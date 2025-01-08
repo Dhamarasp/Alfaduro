@@ -15,16 +15,16 @@ class Item extends Component
     public function render()
     {
         $paginate = 10;
-        $relation = ModelsItem::with('category', 'brand');
+        $relation = ModelsItem::with('kategori', 'merek');
 
         if ($this->queryBarang != null) {
             $dataItems = $relation
-                ->where('nameItem', 'like', '%' . $this->queryBarang . '%')
-                ->orWhereHas('category', function ($query) {
-                    $query->where('nameCategory', 'like', '%' . $this->queryBarang . '%');
+                ->where('namaBarang', 'like', '%' . $this->queryBarang . '%')
+                ->orWhereHas('kategori', function ($query) {
+                    $query->where('namaKategori', 'like', '%' . $this->queryBarang . '%');
                 })
-                ->orWhereHas('brand', function ($query) {
-                    $query->where('nameBrand', 'like', '%' . $this->queryBarang . '%'); // Assuming your brand table has a `nameBrand` column.
+                ->orWhereHas('merek', function ($query) {
+                    $query->where('namaMerek', 'like', '%' . $this->queryBarang . '%'); // Assuming your brand table has a `nameBrand` column.
                 })
                 ->paginate($paginate);
         } else {

@@ -1,128 +1,106 @@
 @extends('app')
 
+@section('title', 'Riwayat')
 @section('content')
-    <div class="card shadow-lg border-3">
-        <div class="card-header text-center border-2">
-            <h3>Riwayat</h3>
-        </div>
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead class="fw-bold text-center">
-                        <tr>
-                            <td>No Nota</td>
-                            <td>Nama Kasir</td>
-                            <td>Tanggal</td>
-                            <td>Jam</td>
-                            <td>Jumlah</td>
-                            <td>Pembayaran</td>
-                            <td>Detail</td>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle text-center">
-                        <tr>
-                            <td>0001</td>
-                            <td>Bima</td>
-                            <td>21 September 2024</td>
-                            <td>12:15</td>
-                            <td>Rp. 75.000</td>
-                            <td>
-                                <span class="badge text-bg-success">Cash</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-info-circle"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>0001</td>
-                            <td>Bima</td>
-                            <td>21 September 2024</td>
-                            <td>12:15</td>
-                            <td>Rp. 75.000</td>
-                            <td>
-                                <span class="badge text-bg-primary">Qris</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#transactionDetailModal"><i class="bi bi-info-circle"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+
+
+<section class="section">
+    <div class="section-header">
+        <h1>Riwayat</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Pengadaan</a></div>
+            <div class="breadcrumb-item active"><a href="#">Rencana</a></div>
+            <div class="breadcrumb-item">Show</div>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="transactionDetailModalLabel">Transaction Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Transaction Summary Section -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <p><strong>Cashier Name:</strong> John Doe</p>
-                            <p><strong>Transaction Date:</strong> 2024-11-21</p>
-                            <p><strong>Transaction ID:</strong> #TRX123456</p>
+
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card-header-form">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h4>Daftar Riwayat Transaksi</h4>
+                            <div class="card-header-form">
+                                {{-- <div class="input-group">
+                                    <a href="{{ route('rencana.create', $rencana->id) }}" class="btn btn-primary">Tambah
+                                        Barang</a>
+                                </div> --}}
+                            </div>
                         </div>
-                        <div class="col-md-6 text-md-end">
-                            <p><strong>Total Amount:</strong> $120.00</p>
-                            <p><strong>Payment Method:</strong> Credit Card</p>
-                            <p><strong>Status:</strong> <span class="badge bg-success">Completed</span></p>
+
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-md">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Tanggal</th>
+                                        <th>Nominal Pembelian</th>
+                                        <th>Jumlah Produk</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    @foreach ($riwayat as $data)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $data->pegawai->name }}</td>
+                                        <td>{{ $data->tanggalTransaksi }}</td>
+                                        <td>{{ 'Rp ' . number_format( $data->totalHarga , 0, ',', '.') }}</td>
+                                        <td>{{ $data->jumlahProduk }}</td>
+                                        <td>
+                                            <a href="{{ route('transaksi.show', $data->id) }}" class="btn btn-icon btn-info"><i
+                                                    class="fas fa-info-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <nav class="d-inline-block">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"><i
+                                                class="fas fa-chevron-left"></i></a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1 <span
+                                                class="sr-only">(current)</span></a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
-    
-                    <!-- Items Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Item</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Product A</td>
-                                    <td>2</td>
-                                    <td>$25.00</td>
-                                    <td>$50.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Product B</td>
-                                    <td>1</td>
-                                    <td>$70.00</td>
-                                    <td>$70.00</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="4" class="text-end"><strong>Grand Total</strong></td>
-                                    <td><strong>$120.00</strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning">
-                        <i class="bi bi-printer"></i> Print
-                    </button>
-                    <button type="button" class="btn btn-success">
-                        <i class="bi bi-receipt"></i> Save Receipt
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
-    
+</section>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Anda Yakin ?',
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Iya, Hapus'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form programmatically
+                document.getElementById(`delete-form-${id}`).submit();
+            }
+        });
+    }
+
+</script>
 @endsection
+
+

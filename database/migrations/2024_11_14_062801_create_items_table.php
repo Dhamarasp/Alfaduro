@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('barang', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('brand_id')->unsigned()->nullable();
-            $table->foreign('brand_id')->nullable()->references('id')->on('brands')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
-
-            $table->bigInteger('category_id')->unsigned();
-            $table->foreign('category_id')->nullable()->references('id')->on('categories')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
-
-            $table->string('nameItem');
-            $table->string('image');
-            $table->integer('price')->unsigned();
-            $table->integer('stock')->unsigned();
+            $table->foreignId('id_kategori')->constrained('kategori')->cascadeOnDelete();
+            $table->foreignId('id_merek')->constrained('merek')->cascadeOnDelete();
+            $table->foreignId('id_satuan')->constrained('satuan')->cascadeOnDelete();
+            $table->string('namabarang')->nullable();
+            $table->string('gambarBarang')->nullable();
+            $table->bigInteger('stokBarang')->nullable();
+            $table->integer('status')->nullable();
+            $table->bigInteger('hargaJual')->nullable();
+            $table->bigInteger('hargaBeli')->nullable();
+            $table->bigInteger('laba')->nullable();
+            $table->date('tanggalMasuk')->nullable();
+            $table->date('tanggalExpire')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('barang');
     }
 };

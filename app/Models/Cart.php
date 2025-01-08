@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-    protected $guarded = [];
+    protected $table = 'keranjang';
 
-    public function item()
+    public function barang()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'id_barang');
     }
 }

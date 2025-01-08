@@ -1,48 +1,121 @@
 @extends('app')
 
 @section('content')
-@include('layouts/toast')
-<div class="card shadow-lg border-3">
-    <div class="card-header text-center border-2">
-        <h3>Daftar Kategori</h3>
+@section('title', 'Kategori')
+
+<section class="section">
+    <div class="section-header">
+      <h1>Kategori</h1>
+      <div class="section-header-breadcrumb">
+        <div class="breadcrumb-item active"><a href="#">Kelola</a></div>
+        <div class="breadcrumb-item">Kategori</div>
+      </div>
     </div>
-    <div class="card-body">
-        <div class="mb-1">
-            <a href="{{ route('kategori.create') }}" class="btn btn-success" role="button">Tambah Kategori</a>
+
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+              <div class="card shadow">
+                <form action="{{ route('kategori.store') }}" method="POST">
+                @csrf
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label>Tambah Kategori Baru</label>
+                      <input type="text" class="form-control" name="nameCategory" required="" placeholder="Masukkan Kategori Baru">
+                    </div>
+                    <button class="btn btn-primary text-right">Submit</button>
+                  </div>
+                </form>
+              </div>
+          </div>
         </div>
-        @if ($categories->isempty())
-        <h3 class="text-center">Kategori Kosong</h3>
-        @else
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
-                <thead class="fw-bold text-center">
-                    <tr>
-                        <td>No</td>
-                        <td>Nama Kategori</td>
-                        <td>Aksi</td>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    @foreach ($categories as $category)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $category->nameCategory }}</td>
-                        <td>
-                            <div class="text-nowrap d-inline-flex align-items-center">
-                                <button class="btn btn-sm btn-primary me-2"><i class="bi bi-pencil-square"></i></button>
-                                <form action="{{ route('kategori.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="card-header">
+              <h4>Daftar Kategori</h4>
+              <div class="card-header-form">
+                  <form>
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search">
+                      <div class="input-group-btn">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped table-md">
+                  <tr>
+                    <th>#</th>
+                    <th>Nama Kategori</th>
+                    <th>Action</th>
+                  </tr>
+                  @foreach ($categories as $kategori)
+                  <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $kategori->namaKategori }}</td>
+                    <td>
+                        <a href="#" class="btn btn-icon btn-info"><i class="fas fa-info-circle"></i></a>
+                        <a href="#" class="btn btn-icon btn-warning"><i class="far fa-edit"></i></a>
+                        <!-- Delete Button -->
+                        <button class="btn btn-icon btn-danger" onclick="confirmDelete({{ $kategori->id }})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+
+                        <!-- Delete Form (hidden) -->
+                        <form id="delete-form-{{ $kategori->id }}" action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+
+                    </td>
+                  </tr>                      
+                  @endforeach
+                </table>
+              </div>
+            </div>
+            <div class="card-footer text-right">
+              <nav class="d-inline-block">
+                <ul class="pagination mb-0">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                  </li>
+                  <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
-        @endif
+      </div>
     </div>
-</div>
+  </section>
+  <script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Anda Yakin ?',
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Iya, Hapus'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form programmatically
+                document.getElementById(`delete-form-${id}`).submit();
+            }
+        });
+    }
+</script>
+
 @endsection
