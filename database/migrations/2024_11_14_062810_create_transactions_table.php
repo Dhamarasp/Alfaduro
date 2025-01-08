@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
-
-            $table->date('date');
-            $table->integer('total')->unsigned();
-            $table->integer('pay_total')->unsigned();
-            $table->integer('charge')->unsigned();
+            $table->foreignId('id_pegawai')->constrained('pegawai')->cascadeOnDelete();
+            $table->foreignId('id_pembayaran')->nullable()->constrained('jenis_pembayaran')->cascadeOnDelete();
+            $table->foreignId('id_layanan')->nullable()->constrained('layanan_pemesanan')->cascadeOnDelete();
+            $table->date('tanggalTransaksi')->nullable();
+            $table->bigInteger('totalHarga')->nullable();
+            $table->bigInteger('uang')->nullable();
+            $table->bigInteger('uangKembali')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('transaksi');
     }
 };

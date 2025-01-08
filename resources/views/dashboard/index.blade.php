@@ -1,8 +1,13 @@
 @extends('app')
 
+@section('title', 'Dashboard')
 @section('content')
+<section class="section">
+    <div class="section-header">
+      <h1>Dashboard</h1>
+    </div>
 
-<div class="alert alert-secondary alert-dismissible fade show mx-100 shadow" role="alert" style="max-width: 800px;">
-    <h1 class="display-4 fw-bold text-center">🚧 <br>Dashboard Coming Soon! hehe</h1>
-</div>
+    <div class="section-body">
+    </div>
+  </section>
 @endsection

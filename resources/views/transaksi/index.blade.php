@@ -1,167 +1,209 @@
 @extends('app')
 
+@section('title', 'Transaksi')
 @section('content')
-@include('layouts/toast')
-<div class="container-fluid">
-    <div class="row">
-        <!-- Daftar Barang -->
-        <div class="col-md-7 mb-4 mb-md-0">
-            <div class="card shadow-lg border-3">
-                <div class="card-header text-center py-2 border-2">
-                    <h3>Daftar Barang</h3>
-                </div>
-                <div class="card-body">
-                    @if ($items->isempty())
-                    <h3 class="text-center">Barang Kosong</h3>
-                    @else
-                    <input class="form-control me-2 border-dark border-1 shadow-sm mb-3" type="search" placeholder="Cari Barang" aria-label="Search">
-                    <div id="items-container" class="row row-cols-2 row-cols-md-2 row-cols-lg-3 g-3">
-                        <!-- Mulai perulangan barang -->
-                        @foreach ($items as $item)
-                        <div class="col">
-                            <div class="card h-100 border-1 border-dark shadow-lg">
-                                <div class="d-flex justify-content-center align-items-center" style="height: 120px;">
-                                    <img src="{{ asset('images/items/'. $item->image) }}" class="card-img-top rounded" alt="Gambar Barang" style="object-fit: cover; width: 100px; height: 100px;">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h6 class="fw-semibold mb-1 text-center">{{ $item->nameItem }}</h6>
-                                    <p class="text-muted small mb-2 text-center">
-                                        <span class="badge bg-secondary">{{ $item->category->nameCategory }}</span> | 
-                                        <span class="badge bg-dark">{{ $item->brand && $item->brand->nameBrand ? $item->brand->nameBrand : 'No Brand'}}</span>
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-primary fw-bold">{{ 'Rp ' . number_format($item->price, 0, ',', '.') }}</span>
-                                        @if ($item->stock >= 100)
-                                        <span class="badge rounded-pill bg-success">Stok : {{ $item->stock }}</span>
-                                        @elseif($item->stock >= 50)
-                                        <span class="badge rounded-pill bg-warning">Stok : {{ $item->stock }}</span>
-                                        @elseif($item->stock >= 1)
-                                        <span class="badge rounded-pill bg-danger">Stok : {{ $item->stock }}</span>
-                                        @else
-                                        <span class="badge rounded-pill bg-danger">Stok : Habis</span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="card-footer p-2 bg-transparent border-0">
-                                    <form action="{{ route('keranjang.store') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="item_id" value="{{ $item->id }}">
-                                        <button type="submit" {{ $item->stock == 0 ? 'disabled' : '' }} class="btn btn-outline-primary w-100 btn-sm">
-                                            <i class="bi bi-cart-plus me-1"></i>Keranjang
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                        <!-- Akhir perulangan barang -->
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
 
-        <!-- Keranjang -->
-        <div class="col-md-5">
-            <div class="card shadow-lg border-3">
-                <div class="card-header text-center py-2 border-2">
-                    <h3>Keranjang</h3>
-                </div>
-                @if ($carts->isempty())
-                    <div class="text-center py-4">
-                        <i class="bi bi-cart-plus fs-1"></i>
-                        <h4 class="text-center">Kosong</h4>
+<section class="section">
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <h1>Transaksi</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item"><a href="#">Pengadaan</a></div>
+            <div class="breadcrumb-item"><a href="#">Rencana</a></div>
+            <div class="breadcrumb-item">Detail</div>
+        </div>
+    </div>
+
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4>Buat Pesanan</h4>
                     </div>
-                @else
                     <div class="card-body">
+                        @if ($carts->isEmpty())
+                        <div class="text-center py-5">
+                            <i class="fas fa-shopping-cart fa-3x text-muted"></i>
+                            <p class="mt-3">Keranjang kosong</p>
+                        </div>
+                        @else
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <thead class="fw-bold text-center">
-                                    <tr>
-                                        <td>No</td>
-                                        <td>Barang</td>
-                                        <td>Sub Total</td>
-                                        <td>Qty</td>
-                                        <td>Aksi</td>
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#</th>
+                                        <th>Barang</th> 
+                                        <th>Quantity    </th>
+                                        <th>Sub Total</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center align-middle">
+                                <tbody>
                                     @foreach ($carts as $cart)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td data-price="{{ $cart->item->price }}">
-                                                {{ $cart->item->nameItem }}
-                                            </td>
-                                            <td class="subtotal">
-                                                {{ 'Rp ' . number_format($cart->qty * $cart->item->price, 0, ',', '.') }}
-                                            </td>
-                                            <td>
+                                    <tr class="text-center">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $cart->namabarang }}</td>
+                                
+                                        <!-- Form for Updating Quantity -->
+                                        <td>
+                                            <form id="update-form-{{ $cart->cart->id }}" action="{{ route('transaksi.update', $cart->cart->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
                                                 <div class="input-group">
-                                                    <!-- Minus Button -->
-                                                    <button 
-                                                      class="btn btn-outline-danger btn-sm" 
-                                                      type="button" 
-                                                      id="decreaseBtn">
-                                                      <i class="bi bi-dash"></i>
-                                                    </button>
-                                            
-                                                    <!-- Number Input -->
-                                                    <input 
-                                                      type="number" 
-                                                      class="form-control form-control-sm text-center"
-                                                      style="width: 50px;" 
-                                                      id="quantityInput" 
-                                                      name="quantity" 
-                                                      value="1" 
-                                                      min="1" 
-                                                      max="10"
-                                                      step="1"
-                                                      disabled 
-                                                      required>
-                                            
-                                                    <!-- Plus Button -->
-                                                    <button 
-                                                      class="btn btn-outline-success btn-sm" 
-                                                      type="button" 
-                                                      id="increaseBtn">
-                                                      <i class="bi bi-plus"></i>
-                                                    </button>
+                                                    <input type="number" name="quantity" class="form-control form-control-sm text-center"
+                                                        value="{{ $cart->cart->quantity }}" min="1" max="{{ $cart->stokBarang }}"
+                                                        onchange="updateQuantity({{ $cart->cart->id }})">
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <form action="{{ route('keranjang.destroy', $cart->id) }}" method="POST">
+                                            </form>
+                                        </td>
+                                
+                                        <!-- Display Total Price -->
+                                        <td>{{ 'Rp ' . number_format($cart->cart->quantity * $cart->hargaJual, 0, ',', '.') }}</td>
+                                
+                                        <!-- Action Buttons -->
+                                        <td>
+                                            <div class="">
+                                                <form action="{{ route('transaksi.destroy', $cart->cart->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="bi bi-trash"></i>
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3" class="text-end">Total</td>
-                                        <td colspan="2"><input class="form-control" type="text" disabled value="{{ 'Rp ' . number_format($total, 0, ',', '.') }}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-end">Pembayaran</td>
-                                        <td colspan="2">
-                                            <input type="number" class="form-control bg-body-secondary">
+                                            </div>
                                         </td>
                                     </tr>
+                                    @endforeach
+                                </tbody>
+                                
+                                {{-- Checkout --}}
+                                <tfoot>
+                                    <form action="{{ route('checkout') }}" method="POST">
+                                        @csrf
+                                        <tr>
+                                            <td colspan="3" class="text-right font-weight-bold">Pilih Pegawai</td>
+                                            <td colspan="2">
+                                                <select class="form-control" name="id_pegawai">
+                                                    <option disabled selected>Pilih Pegawai</option>
+                                                    @foreach ($pegawai as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right font-weight-bold">Opsi Pembayaran</td>
+                                            <td colspan="2">
+                                                <select class="form-control" name="id_pembayaran">
+                                                    <option disabled selected>Pilih Pembayaran</option>
+                                                    @foreach ($pembayaran as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->jenisPembayaran }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right font-weight-bold">Layanan Pemesanan</td>
+                                            <td colspan="2">
+                                                <select class="form-control" name="id_layanan">
+                                                    <option disabled selected>Pilih Layanan</option>
+                                                    @foreach ($layanan as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->jenisLayanan }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right font-weight-bold">Grand Total</td>
+                                            <td colspan="2">
+                                                <input type="text" name="totalHarga" class="form-control text-right" value="{{ $val_sum }}"
+                                                readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right font-weight-bold">Nominal Uang</td>
+                                            <td colspan="2">
+                                                <input type="number" name="uang" class="form-control">
+                                            </td>
+                                        </tr>
                                 </tfoot>
                             </table>
-                            <div class="text-end mt-3">
-                                <button class="btn btn-warning">Reset</button>
-                                <button class="btn btn-primary">Bayar</button>
+                        </div>
+                        <div class="text-right mt-3">
+                            <button type="reset" class="btn btn-warning"><i class="fas fa-sync"></i> Reset</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Bayar</button>
+                        </div>
+                    </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Daftar Barang -->
+            <div class="col-12">
+                <div class="card card-primary shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4>Daftar Barang</h4>
+                        <div class="input-group w-50">
+                            <input type="text" class="form-control" placeholder="Cari Barang" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
                     </div>
-                @endif
+                    <div class="card-body">
+                        <div id="items-container" class="row">
+                            @foreach ($items as $item)
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="card shadow-sm border-0 rounded-lg item-card hover-shadow">
+                                    <div class="card-header text-center mx-auto bg-light rounded-top">
+                                        <img src="{{ asset($item->gambarBarang ? 'images/items/' . $item->gambarBarang : 'images/items/default.png') }}"
+                                            alt="Gambar Barang" class="img-fluid rounded"
+                                            style="max-height: 120px; object-fit: cover;">
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h6 class="font-weight-bold text-dark mb-1">{{ $item->namabarang }}</h6>
+                                        <p class="text-muted small mb-2 text-nowrap">
+                                            <span
+                                                class="badge badge-light border">{{ $item->kategori->namaKategori }}</span>
+                                            <span
+                                                class="badge badge-light border">{{ $item->merek->namaMerek ?? 'No Brand' }}</span>
+                                        </p>
+                                        <p class="text-primary font-weight-bold mb-2">
+                                            {{ 'Rp ' . number_format($item->hargaJual, 0, ',', '.') }}</p>
+                                        <span
+                                            class="badge {{ $item->stokBarang >= 100 ? 'badge-success' : ($item->stokBarang >= 50 ? 'badge-warning' : 'badge-danger') }}">
+                                            Stok: {{ $item->stokBarang }}
+                                        </span>
+                                    </div>
+                                    <div class="card-footer text-center bg-light rounded-bottom">
+                                        <form action="{{ route('transaksi.store') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" value="{{ $item->id }}" name="id_barang">
+                                            <input type="hidden" value="1" name="quantity">
+                                            <button type="submit" class="btn btn-sm btn-primary w-100"
+                                                {{ $item->stokBarang == 0 ? 'disabled' : '' }}>
+                                                <i class="fas fa-cart-plus"></i>Keranjang
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<script>
+    function updateQuantity(cartId) {
+        // Submit the form for the given cart ID
+        document.getElementById('update-form-' + cartId).submit();
+    }
+</script>
+
+
 @endsection

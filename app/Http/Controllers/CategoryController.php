@@ -22,7 +22,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         Category::create([
-            "nameCategory" => $request->nameCategory,
+            'namaKategori' => $request->nameCategory,
         ]);
 
         return redirect()->route("kategori.index")->with("success","Berhasil Tambah Kategori");

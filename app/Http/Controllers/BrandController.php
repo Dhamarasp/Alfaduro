@@ -20,7 +20,6 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-
         if ($request->hasFile('image')) {
             // Move the image to 'public/images' directory with a unique name
             $imageName = time() . '.' . $request->file('image')->extension();
@@ -30,26 +29,25 @@ class BrandController extends Controller
         }
 
         Brand::create([
-            "nameBrand" => $request->nameBrand,
-            "image" => $imageName,
+            'namaMerek' => $request->namaMerek,
+            'gambarMerek' => $imageName,
         ]);
 
-        return redirect()->route("brand.index")->with("success", "Berhasil Tambah Brand");
+        return redirect()->route("merek.index")->with("success", "Berhasil Tambah Merek");
     }
 
-    public function destroy(Brand $brand)
+    public function destroy(Brand $merek)
     {
-        if($brand->image != 'default.png'){
+        if($merek->gambarMerek != 'default.png'){
             
-            $imagePath = public_path('images/brands/' . $brand->image);
+            $imagePath = public_path('images/brands/' . $merek->gambarMerek);
     
-            if (file_exists($imagePath) && $brand->image) {
+            if (file_exists($imagePath) && $merek->gambarMerek) {
                 unlink($imagePath);
             }
 
         }
-
-        $brand->delete();
-        return redirect()->route("brand.index")->with("success", "Berhasil Hapus Brand");
+        $merek->delete();
+        return redirect()->route("merek.index")->with("success", "Berhasil Hapus Merek");
     }
 }
